@@ -1,0 +1,829 @@
+/* ======= โครงหลัก ======= */
+@layer base {
+    /* ใช้ box-sizing: border-box; กับทุกองค์ประกอบเพื่อความง่ายในการจัด Layout */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI';
+        margin: 0;
+        padding: 0;
+        background-color: #fafafa;
+        color: #333333;
+        /* Sticky Footer: เพิ่ม Flexbox เพื่อดัน Footer ลงด้านล่างสุดเสมอ */
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit; /* ให้ใช้สีจาก Parent */
+        transition: color 0.3s;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+}
+@layer layout {
+/* ======= Header ======= */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #81d7f7;
+    color: white;
+    padding: 10px 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* ======= main nav ======= */
+.main-nav {
+    flex-grow: 1; 
+    display: flex;
+    justify-content: flex-end; /* ผลักกลุ่มเมนูไปทางขวา */
+    min-width: 60%; 
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    /* !!! สำคัญ: เพิ่ม gap เพื่อให้ปุ่มชิดกันมากขึ้น !!! */
+    gap: 15px; /* กำหนดระยะห่างระหว่างปุ่ม, สามารถลดเป็น 10px ได้ถ้าต้องการให้ชิดกว่านี้ */
+    margin: 0;
+    padding: 0;
+    flex-grow: 0; /* !!! ไม่ต้องให้ UL ยืดตัวเต็มที่ เพื่อให้ชิดขวาตาม nav !!! */
+    align-items: center; /* จัดเรียงปุ่มให้อยู่กึ่งกลางแนวตั้ง */
+}
+
+/* ทำให้รายการเมนูหลักมีขนาดพอดีกับเนื้อหา */
+.main-nav ul li {
+    flex-grow: 0; /* !!! ไม่ให้รายการเมนูยืดตัว (Content-based size) !!! */
+    text-align: center; 
+    padding: 0; 
+    margin-left: 0; 
+    /* !!! กำหนดให้ LI แต่ละตัวมี display: block เพื่อให้ลิงก์ยืดเต็ม LI !!! */
+    display: block; 
+}
+
+/* จัดสไตล์ลิงก์ (A) ให้ครอบคลุมพื้นที่ LI ทั้งหมด */
+
+.main-nav a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    
+    display: block; /* ทำให้ลิงก์แสดงผลเป็นบล็อกเพื่อครอบคลุมพื้นที่ LI */
+}
+
+.main-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ======= content ======= */
+main {
+    padding: 30px;
+    flex-grow: 1;
+}
+
+h1 {
+    color: #1e90ff;
+    border-bottom: 2px solid #1e90ff;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+/* ======= Footer ======= */
+.main-footer {
+    text-align: center;
+        padding: 15px 0;
+        background-color: #81d7f7;
+        color: white;
+        /* ลบ margin-top: 100px; ออก และใช้ flexbox จัดการ */
+        margin-top: 0; 
+        font-size: 0.9rem;
+        flex-shrink: 0; /* ทำให้ไม่หด */
+}
+}
+
+@layer component {
+/* ======= message status ======= */
+.status-message div[role="status"] {
+    background-color: #dff0d8;
+    color: #3c763d;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.status-message div[role="alert"] {
+    background-color: #f2dede;
+    color: #a94442;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.error-message {
+    color: #a94442; 
+    font-size: 0.9rem;
+    margin-top: -10px; 
+    margin-bottom: 5px;
+    display: block;
+    font-weight: 500;
+}
+
+.main-nav .user-logout-tab {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: flex-end; /* !!! เปลี่ยนเป็น flex-end เพื่อจัดชื่อผู้ใช้และปุ่มชิดขวาใน LI !!! */
+    
+    flex-grow: 0; /* !!! ไม่ให้ LI ยืดตัว (Content-based size) !!! */
+    padding: 0; 
+    text-align: right;
+    margin-left: 0; 
+}
+
+.main-nav .user-logout-tab .user-name-link {
+    /* ... (สไตล์เดิม) ... */
+    padding-right: 5px; /* เพิ่ม padding เล็กน้อยก่อนปุ่ม */
+}
+
+.main-nav .user-logout-tab .logout-form {
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    display: inline-block; 
+}
+
+.main-nav .user-logout-tab .logout-button {
+    width: auto;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 5px; 
+}
+
+/*Home ********************************************************************************************************************************/
+
+.home-container {
+    padding-top: 0;
+}
+
+/* --- Hero Section --- */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 60px 0;
+    background: linear-gradient(to right, #e6f7ff, #ffffff); /* ไล่สี */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    margin-bottom: 10px;
+    min-height: 400px;
+}
+
+.hero-text {
+    max-width: 55%;
+    padding-left: 50px;
+}
+
+.hero-text h1 {
+    font-size: 3.2rem;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    color: #1e90ff; /* น้ำเงินเข้ม */
+    padding-bottom: 0;
+}
+
+.hero-text h1 span {
+    color: #fe9114; /* สีส้มสดใส */
+}
+
+.hero-text p {
+    font-size: 1.3rem;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.hero-image {
+    max-width: 45%;
+    padding-right: 50px;
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.5s ease;
+}
+
+.hero-image img:hover {
+    transform: scale(1.03);
+}
+
+/* --- Services Section --- */
+.services {
+    text-align: center;
+    padding: 40px 0;
+    margin-bottom: 20px;
+}
+
+.services h2, .about h2 {
+    font-size: 2.2rem;
+    color: #1e90ff;
+    margin-bottom: 40px;
+}
+
+.service-list {
+    display: flex;
+    justify-content: space-around;
+    gap: 50px;
+    flex-wrap: wrap; /* รองรับการแสดงผลบนมือถือ */
+}
+
+.service-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex: 1 1 300px; /* ทำให้ card ยืดหดได้ */
+    min-width: 250px;
+    text-align: center;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.service-card img {
+    width: 150px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.service-card h3 {
+    color: #81d7f7;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* --- About Section --- */
+.about {
+    background-color: #f0faff; /* พื้นหลังสีฟ้าอ่อนมากๆ */
+    padding: 50px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.about p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+/*add Dentist********************************************************************************************************************************/
+
+/* ======= ทันตแพทย์ ======= */
+.dentist-form {
+    max-width: 600px;
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.dentist-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #333333;
+}
+
+.dentist-form input[type="text"],
+.dentist-form textarea,.dentist-form input[type="email"],
+.dentist-form input[type="password"] {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    font-family: 'Segoe UI';
+}
+
+.dentist-form input:focus,
+.dentist-form textarea:focus,
+.dentist-form input[type="email"]:focus,
+.dentist-form input[type="password"]:focus {
+    outline: none;
+    border-color: #81d7f7;
+    box-shadow: 0 0 3px rgba(7, 0, 204, 0.3);
+    font-family: 'Segoe UI';
+}
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/*ปุ่ม select ********************************************************************************************************************************/
+.dentist-form input[type="date"],
+.dentist-form select {
+    /* ใช้สไตล์เดียวกับ input ทั่วไป */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    width: 100%; /* ให้เต็มความกว้าง */
+}
+
+.dentist-form input[type="date"]:focus,
+.dentist-form select:focus {
+    /* ใช้สไตล์ focus เดียวกัน */
+    outline: none;
+    border-color: #81d7f7;
+    box-shadow: 0 0 3px rgba(7, 0, 204, 0.3);
+}
+/*Login********************************************************************************************************************************/
+.dentist-form .login-buttons {
+    display: flex;
+    justify-content: center; 
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%; 
+}
+
+.dentist-form .login-buttons .button {
+    width: 100%; 
+    max-width: 400px; 
+    padding: 10px 0;
+}
+
+/* ปุ่ม */
+.button {
+    display: inline-block;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    padding: 10px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    width: 120px; 
+} 
+
+
+.button:hover {
+    background-color: #81f781;
+}
+
+.cancel-button:hover {
+    background-color: #f78181;
+}
+
+/*liss Dentist********************************************************************************************************************************/
+
+.search-add {
+    width: 90%; 
+    margin: 50px auto 20px auto; 
+    display: flex;
+    flex-direction: column; 
+    gap: 10px; 
+}
+
+.search-add form { 
+    width: 100%; 
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: flex-start; 
+    gap: 10px; 
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0; 
+    max-width: none;
+}
+
+.search-add form label {
+    flex-grow: 1;
+    color: #1e90ff;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    gap: 5px;
+    margin: 0; 
+}
+
+.search-add form label input[type="text"] {
+    width: 100%; 
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.search-add form label input[name="term"]:focus {
+    outline: none;
+    border-color: #81d7f7;
+    box-shadow: 0 0 3px rgba(7, 0, 204, 0.3);
+}
+
+.pagination-group {
+    width: 100%; 
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center; 
+    gap: 15px;
+    margin-top: 20px; 
+}
+
+/* ======= ปุ่ม x / search======= */
+.buttonsearch,
+.accentcancel {
+    display: inline-block;
+    min-width: 60px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.buttonsearch {
+    background-color: #1e90ff;
+    color: white;
+}
+
+.buttonsearch:hover {
+    background-color: #5bbdf5;
+}
+
+.accentcancel {
+    background-color: #1e90ff;
+    color: #ffffff;
+}
+
+.accentcancel:hover {
+    background-color: #5bbdf5;
+}
+
+/* ======= ปุ่ม Add Dentist ======= */
+.button.primary { 
+    margin: 0;
+    display: inline-block;
+    background-color: #1e90ff;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.button.primary:hover {
+    background-color: #5bbdf5;
+    transform: translateY(-2px);
+}
+
+/* ======= การจัด nav ด้านบน (ของปุ่ม Add Dentist) ======= */
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start; 
+    margin: 0; 
+    padding: 0;
+}
+
+nav ul li {
+    margin-left: 15px;
+}
+
+/* ======= ตาราง Dentist ======= */
+table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background-color: #81d7f7;
+    color: #fff;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+th, td, pre{
+font-family: 'Segoe UI';
+}
+
+.sp{
+   color: #1e90ff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #e9f6ff;
+}
+
+td a {
+    color: #1e90ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* ======= ตัวแบ่งหน้า (Footer Pagination) ======= */
+.pagination {
+    display: flex;
+    justify-content: flex-end; /* จัดชิดขวาเสมอ */
+    margin-top: 0px;
+}
+
+.pagination nav {
+    display: inline-block;
+}
+
+.pagination a,
+.pagination span {
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+}
+
+.pagination a {
+    background-color: #f0f8ff;
+    color: #1e90ff;
+}
+
+.pagination a:hover {
+    background-color: #81d7f7;
+    color: #fff;
+}
+
+.pagination span {
+    background-color: #1e90ff;
+    color: #fff;
+}
+
+/*ปุ่มEdit และ Delete หน้า view ********************************************************************************************************************************/
+
+.action-buttons-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px; 
+    width: 90%; 
+    margin: 15px auto 0 auto; 
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+
+
+.top-view-actions {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    width: 90%; 
+    margin: 30px auto 10px auto; 
+    padding: 0; 
+}
+
+.left-buttons ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0; 
+    margin: 0;
+    gap: 15px;
+}
+
+.left-buttons ul li {
+    margin-left: 0; 
+}
+
+.right-button ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0;
+    margin: 0;
+}
+.right-button ul li {
+    margin-left: 10px; 
+}
+
+
+
+/*หน้า appointments.list ********************************************************************************************************************************/
+
+.appointments-wrapper {
+    width: 90%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.appointment-date-group {
+    margin-bottom: 30px;
+}
+
+.appointment-date-group h3 {
+    color: #fe9114; /* สีส้ม */
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.appointment-card {
+    background: #fff;
+    border-left: 5px solid #81d7f7; /* แถบสีด้านซ้าย */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.appointment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.appointment-header a {
+    color: #1e90ff;
+    font-weight: 600;
+}
+
+.appointment-header strong {
+    color: #fe9114;
+}
+
+.appointment-body p,
+.appointment-body pre {
+    margin: 5px 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.appointment-body strong {
+    font-weight: 600;
+    color: #333;
+}
+
+.appointment-body pre {
+    white-space: pre-wrap;
+    background-color: #81d8f723;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    margin-top: 5px;
+}
+
+.search-add input[type="date"] {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 1rem;
+    width: 50%; 
+
+}
+
+/*หน้า appointments.list ช่องค้นหา ********************************************************************************************************************************/
+
+.search-add .appointment-search-form { 
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.search-add .appointment-search-form .search-term-label {
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    gap: 5px;
+    margin: 0; 
+}
+
+
+.search-add .appointment-search-form .search-date-label {
+    flex-grow: 0; /* **ไม่ให้ขยาย** */
+    flex-shrink: 0; /* ไม่ให้หดตัว */
+    width: auto;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.search-add .appointment-search-form input[type="date"] {
+    width: 150px; /* **กำหนดความกว้างที่เหมาะสม ** */
+    flex-shrink: 0; 
+    padding: 10px; 
+}
+
+.pagination-group .button.primary { 
+    width: auto; 
+}
+
+.appointment-date-time {
+    background: #fff;
+    border-left: 5px solid #81d7f7;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 5px 10px;
+    margin: 30px auto 0px auto;
+    width: 90%; /* ให้เท่ากับตาราง */
+    font-weight: 500;
+}
+
+.appointment-date-time span {
+    color: #1e90ff;
+    font-weight: 600;
+}
+
+.role-message {
+    text-align: center;
+    margin: 10px auto; 
+    padding: 0px;
+    border-radius: 5px;
+    font-weight: 500;
+    color: #444;
+}
+
+
+}
