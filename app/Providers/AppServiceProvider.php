@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,8 +23,5 @@ class AppServiceProvider extends ServiceProvider
             ::defaultView('vendor.pagination.default');
         \Illuminate\Pagination\Paginator
             ::defaultSimpleView('vendor.pagination.simple-default');
-        if (config('app.env') !== 'local') {
-        \Illuminate\Support\Facades\URL::forceScheme('https');
-    }
     }
 }
